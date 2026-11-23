@@ -1,0 +1,140 @@
+{
+  "last_node_id": 3,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "CometAPISettings",
+      "pos": [
+        60,
+        60
+      ],
+      "size": [
+        290,
+        120
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "CometAPISettings"
+      },
+      "widgets_values": [],
+      "title": "① APIMart Key 设置"
+    },
+    {
+      "id": 2,
+      "type": "CometAPIUnifiedVideo",
+      "pos": [
+        410,
+        60
+      ],
+      "size": [
+        480,
+        650
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CometAPIUnifiedVideo",
+        "cometapi_widget_values": {
+          "channel": "apimart",
+          "model_family": "veo",
+          "model": "veo3.1-fast",
+          "prompt": "电影感实拍，一只橘猫坐在窗边，午后的暖阳洒在毛发上，猫咪缓缓转头看向镜头，镜头轻微推进，动作自然，画面稳定。",
+          "aspect_ratio": "16:9",
+          "duration": "8",
+          "resolution": "720p",
+          "mode": "文生",
+          "size": "1280x720"
+        },
+        "cometapi_virtual_image_links": [],
+        "cometapi_prompt_reference_doc": {
+          "version": 1,
+          "text": "电影感实拍，一只橘猫坐在窗边，午后的暖阳洒在毛发上，猫咪缓缓转头看向镜头，镜头轻微推进，动作自然，画面稳定。",
+          "parts": [
+            {
+              "type": "text",
+              "text": "电影感实拍，一只橘猫坐在窗边，午后的暖阳洒在毛发上，猫咪缓缓转头看向镜头，镜头轻微推进，动作自然，画面稳定。"
+            }
+          ]
+        }
+      },
+      "widgets_values": [
+        "apimart",
+        "veo",
+        "veo3.1-fast",
+        "电影感实拍，一只橘猫坐在窗边，午后的暖阳洒在毛发上，猫咪缓缓转头看向镜头，镜头轻微推进，动作自然，画面稳定。",
+        "16:9",
+        "8",
+        "720p",
+        "文生",
+        "1280x720"
+      ],
+      "title": "② 文生视频",
+      "widgets_values_named": {
+        "channel": "apimart",
+        "model_family": "veo",
+        "model": "veo3.1-fast",
+        "prompt": "电影感实拍，一只橘猫坐在窗边，午后的暖阳洒在毛发上，猫咪缓缓转头看向镜头，镜头轻微推进，动作自然，画面稳定。",
+        "aspect_ratio": "16:9",
+        "duration": "8",
+        "resolution": "720p",
+        "mode": "文生",
+        "size": "1280x720"
+      }
+    },
+    {
+      "id": 3,
+      "type": "Note",
+      "pos": [
+        60,
+        220
+      ],
+      "size": [
+        300,
+        340
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "导入示例时会弹出设置中心：渠道管理 → Apimart → 渠道通用 API Key → 保存并退出。暂无 Key 可先退出。\n\n本示例使用 Veo 3.1 Fast、8秒、720p、16:9。示例模型可更换，费用以 APIMart 控制台为准。\n\n填写提示词后只点击一次运行，等待完成。\n\n生成前请确认 APIMart Key 有可用额度，并且本机可以连接 APIMart。\n\n生成视频自动保存在共享 output/cometapi_assets 中。"
+      ],
+      "title": "使用说明"
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.85,
+      "offset": [
+        10,
+        30
+      ]
+    },
+    "info": {
+      "name": "APIMart 云端文生视频"
+    }
+  },
+  "version": 0.4
+}
