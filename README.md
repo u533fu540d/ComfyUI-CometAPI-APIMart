@@ -1,142 +1,40 @@
-# ComfyUI-CometAPI 1.0.6 · APIMart 改版
+# ComfyUI-CometAPI · APIMart 扩展版
 
-这个私有仓库用于在自己的 ComfyUI Desktop 实例之间安装同一份插件。原插件由 B 站「那颗星星188」开发，授权条款见 [LICENSE](LICENSE)。此版本保留 APIMart 官方接口地址、视频节点右键参数菜单、费用显示补丁和 Phosor 渠道适配。 [原插件仓库](https://github.com/nkxx188/ComfyUI-CometAPI)
+ComfyUI-CometAPI 是一套在 ComfyUI 工作流中调用图像、视频、文本和音频 API 的自定义节点。这个扩展版基于 **ComfyUI-CometAPI 1.0.6**，补充了 APIMart 视频参数界面，并附带可以直接导入的文生视频和图生视频工作流。视频由云端生成，无需下载本地视频模型。
 
-## 在另一台 Comfy Desktop 上用 Manager 安装
+## 主要功能
 
-1. 在目标电脑的 PowerShell 中运行 `git ls-remote https://github.com/u533fu540d/ComfyUI-CometAPI-APIMart.git HEAD`。如果 Git 弹出登录窗口，登录有该私有仓库访问权的 GitHub 账号。命令返回提交号后，Git 就能读取仓库了。
-2. 在 Comfy Desktop 启动器里对目标实例打开 **管理 → 启动参数**，启用 `--enable-manager-legacy-ui`。也可以在支持该设置的 Desktop 界面里打开 **Use legacy manager interface**。 [切换 Manager 界面](https://docs.comfy.org/manager/install#switch-between-new-and-legacy-ui)
-3. Manager 4.2.2 默认关闭按 URL 安装。在启动日志里找 Manager 的 `config.ini` 路径，通常是 `ComfyUI\user\__manager\config.ini`。在现有 `[default]` 节下添加或修改 `allow_git_url_install = true`，保存并重启本地实例。该选项适用于监听 `127.0.0.1` 的本地实例。 [Manager 安装策略](https://github.com/Comfy-Org/ComfyUI-Manager#security-policy)
-4. 打开 **Manager → Install via Git URL**，粘贴 `https://github.com/u533fu540d/ComfyUI-CometAPI-APIMart.git`，安装后重启。若目标实例已安装原版 ComfyUI-CometAPI，先把原插件文件夹移到 `custom_nodes` 外，避免同名节点重复加载。
-5. 在画布搜索 **Comet 视频** 或 **CometAPI 设置中心**。打开设置中心的 **渠道管理 → Apimart → 渠道通用 API Key**，填 Key 并保存。使用 [示例工作流](示例工作流) 时，图生示例需要先选一张本机参考图。
+- **APIMart 云端生成**。在 ComfyUI 内使用 APIMart 的图像、视频和文本模型，在设置中心统一配置 API Key。
+- **视频参数设置**。在 `Comet 视频` 节点将渠道设为 `apimart`，右键标题栏可打开参数菜单。生成模式、时长、分辨率和画面比例会根据所选模型更新。
+- **Phosor 视频节点**。可选用 MiniMax H3 和 H3 Turbo。部分参数组合支持费用预估，实际扣费以服务商账单为准。
+- **工作流示例**。仓库包含可直接导入的 [文生视频](示例工作流/01_APIMart_文生视频.json) 和 [图生视频](示例工作流/02_APIMart_图生视频.json) 示例。
 
-也可以使用 [手动安装说明](安装说明.md)。如果从 GitHub 下载源码 ZIP，解压后把含 `__init__.py` 的插件文件夹整体放进实例的 `custom_nodes`。当前插件依赖 `requests` 和 `aiohttp`。
+## 安装
 
-## 原插件说明
+需要可正常启动的本地 ComfyUI 实例。插件依赖 `requests` 和 `aiohttp`，已在 Windows ComfyUI Desktop 实例中验证节点加载。
 
-# ComfyUI-CometAPI
+### 通过 ComfyUI-Manager
 
-作者：B 站「那颗星星188」
-
-ComfyUI-CometAPI 是一套面向 ComfyUI 的多模态 API 创作节点插件。
-
-它不是单纯把 API 接口塞进 ComfyUI，而是把图像、视频、音乐、文本、批量任务、素材卡片、局部运行、设置中心和内置对话助手整合到一套更适合 API 创作的工作流里。
-
-> 授权提醒：本项目采用自定义非商业授权协议。个人学习、高校科研、非营利组织可免费使用；企业、公司内部业务、商业项目、付费服务、二次销售、客户交付等商业用途，必须先联系作者购买商业授权。详见 [LICENSE](LICENSE)。
-
-## 主要解决什么问题
-
-在 ComfyUI 里接 API 做图像、视频、音乐创作时，经常会遇到：
-
-- 多参考图连线混乱。
-- 生成结果复用时容易重跑上游。
-- 不同模型参数差异大，容易传错参数。
-- 批量生成缺少稳定的编号、失败处理和输出管理。
-- LLM、图像、视频、音乐之间衔接不够顺。
-- 提示词和素材管理不够画布化。
-
-CometAPI 的目标是让这些流程更干净、更可控，也更适合长期迭代。
-
-## 核心功能
-
-- **统一节点**：提供 Comet 图像、视频、音乐、文本、批量图像等节点。
-- **设置中心**：统一配置渠道、API Key、模型、别名、自定义模型和提示词预设。
-- **动态参数**：根据渠道和模型自动显示适合的比例、分辨率、时长、模式等参数。
-- **虚拟连线**：多参考图可以拖到统一素材入口，减少画布连线混乱。
-- **素材卡片**：图像、视频、音频、文本结果可以保存成卡片，后续复用不必重复跑上游。
-- **单点运行**：支持只运行局部节点，减少整张工作流重跑。
-- **批量图像**：支持多提示词、多参考图、文件夹批量、并发、失败策略和独立输出目录。
-- **异步任务**：支持图片和视频的异步提交与收取，适合长耗时任务。
-- **提示词组织**：支持文本卡片、批量文本卡片、`@` 素材引用和 `/` 提示词预设。
-- **内置对话**：可以在 ComfyUI 内直接打开 AI 对话窗口，用于问报错、写提示词、看代码、发附件和对话生图。
-
-## 节点列表
-
-- `Comet 图像`
-- `Comet 批量图像`
-- `Comet 异步图像提交`
-- `Comet 异步图片收取`
-- `Comet 文本`
-- `Comet 视频`
-- `Comet 异步视频提交`
-- `Comet 异步视频收取`
-- `Comet 音乐`
-- `Comet 图像卡片`
-- `Comet 视频卡片`
-- `Comet 音频卡片`
-- `Comet 文本卡片`
-- `Comet 批量文本卡片`
-- `Comet 文本追加`
-- `CometAPI 设置中心`
-
-## 安装方式
-
-进入 ComfyUI 的 `custom_nodes` 目录：
-
-```bash
-cd ComfyUI/custom_nodes
-git clone https://github.com/jieg9341-lab/ComfyUI-CometAPI.git
-```
-
-然后重启 ComfyUI。
-
-如果缺少网络请求相关依赖，可以在 ComfyUI 的 Python 环境中安装：
-
-```bash
-python -m pip install requests aiohttp
-```
-
-## 基本使用
-
-1. 安装插件并重启 ComfyUI。
-2. 在节点列表中搜索 `Comet`。
-3. 打开 `CometAPI 设置中心`，配置 API 渠道、API Key 和模型。
-4. 添加需要的节点，例如 `Comet 图像`、`Comet 视频`、`Comet 文本`。
-5. 选择渠道、模型和参数。
-6. 连接节点并运行工作流。
-
-## 私有渠道
-
-插件支持通过 `private_channels` 目录扩展私有渠道。
-
-公开分发版不会内置具体私有渠道业务逻辑，只保留识别、加载和适配机制。
-
-如需编写私有渠道，请阅读：
+在支持 **Install via Git URL** 的旧版 Manager 中粘贴下方仓库地址，安装后重启 ComfyUI。公开仓库可以直接拉取。
 
 ```text
-private_channels/私有渠道适配指南.md
+https://github.com/u533fu540d/ComfyUI-CometAPI-APIMart.git
 ```
 
-注意：
+如果当前使用新版界面，可在 Comfy Desktop 的实例管理面板中通过 **启动参数** 启用 `--enable-manager-legacy-ui`。 [切换 Manager 界面](https://docs.comfy.org/manager/install#switch-between-new-and-legacy-ui)
 
-- 不要把 API Key 写进私有渠道文件。
-- API Key 应在插件设置页填写。
-- 不要把客户私有渠道逻辑提交到公开仓库。
+Manager 4.2.2 默认关闭按 Git URL 安装。使用本地监听（如 `127.0.0.1`）的实例时，在 Manager `config.ini` 的 `[default]` 节下设置 `allow_git_url_install = true`，然后重启实例。配置路径可在启动日志中找到，通常位于 `ComfyUI\user\__manager\config.ini`。 [Manager 安装策略](https://github.com/Comfy-Org/ComfyUI-Manager#security-policy)
 
-## 输出和本地数据
+### 手动安装
 
-生成的图片、视频、音频等资源会保存到 ComfyUI 输出目录下，例如：
+从 GitHub 的 **Code → Download ZIP** 下载，解压后将包含 `__init__.py` 的插件目录复制到目标实例的 `custom_nodes`。已有原版 ComfyUI-CometAPI 时，先将原插件目录移出 `custom_nodes`，避免重复加载同名节点。依赖安装命令见 [Windows 安装说明](安装说明.md)。
 
-```text
-ComfyUI/output/cometapi_assets
-ComfyUI/output/comet_chat
-```
+## 快速开始
 
-用户配置和对话数据会保存在本地，请勿提交到公开仓库。
+1. 在画布搜索 **CometAPI 设置中心**，进入 **渠道管理 → Apimart**，填写 **渠道通用 API Key** 并保存。 [APIMart 密钥管理](https://apimart.ai/keys)
+2. 添加 **Comet 视频** 节点，将渠道设为 `apimart`。右键节点标题栏，选择 **APIMart 参数设置（模型 / 时长 / 比例 / 分辨率）**。
+3. 输入提示词。图生视频还需选择参考图。运行完成后，视频保存到该实例输出目录的 `cometapi_assets` 子文件夹。
 
-## 授权协议
+## 来源与授权
 
-本项目采用自定义非商业授权协议。
-
-- 个人学习：免费。
-- 高校科研：免费。
-- 非营利组织：免费。
-- 企业使用：需要商业授权。
-- 公司内部业务：需要商业授权。
-- 商业项目或付费服务：需要商业授权。
-- 二次销售、打包销售、客户交付：需要商业授权。
-
-详细条款见 [LICENSE](LICENSE)。
-
-商业授权请通过 B 站「那颗星星188」或 GitHub Issues 联系作者。
-
+原插件由 B 站「那颗星星188」开发。此项目沿用原插件的非商业许可。使用、修改和分享须遵守许可证，商业用途需另行向原作者取得授权。 [原插件仓库](https://github.com/nkxx188/ComfyUI-CometAPI) · [许可证](LICENSE)
